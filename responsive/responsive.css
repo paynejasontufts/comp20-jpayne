@@ -2,6 +2,40 @@
  * Jason Payne
  * 10/2/18 */
 
- body {
- 	/*add stuff here*/
- }
+.software {
+	@media only screen
+		and (min-width: 1201px) {
+			{width: 434px; height: 584px; background: url(images/software,png)
+			0px 0px;}
+		}
+	@media only screen
+		and (min-width: 1001px)
+		and (max-width: 1200px) {
+			{width: 424px; height: 571px; background: url(images/software,png)
+			442px 0px;}
+		}
+	@media only screen
+		and (min-width: 801px)
+		and (max-width: 1000px) {
+			{width: 332px; height: 579px; background: url(images/software,png)
+			874px 0px;}
+		}
+	@media only screen
+		and (min-width: 601px)
+		and (max-width: 800px) {
+			{width: 714px; height: 623px; background: url(images/software,png)
+			0px 588px;}
+		}
+	@media only screen
+		and (max-width: 600px) {
+			{width: 481px; height: 620px; background: url(images/software,png)
+			723px 591px;}
+		}
+}
+
+/* pannel 1: 0px, 0px, w:434px, h:584px
+   pannel 2: 442px, 0px, w: 424px, h:571px
+   pannel 3: 874px, 0px, w:332px, 579px
+   pannel 4: 0px, 588px, w:714px, h:623px
+   pannel 5: 723px, 591pc, w: 481px, h:620px
+*/
