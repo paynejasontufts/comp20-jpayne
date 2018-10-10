@@ -6,4 +6,4 @@ Jason Payne
 
 2) I drew heavy inspiration from the Double Rainbow HTML, as well as syntax from the provided pages on the .addEventListener function.
 
-3) Hours spent
+3) I spent about two hours on this project, though about an hour of that was due to a minor but frustrating syntax error that I had trouble pinpointing.

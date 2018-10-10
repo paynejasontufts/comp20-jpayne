@@ -7,3 +7,8 @@ body {
 	text-align: center;
 	font-family: Helvetica;
 }
+
+#lyrics {
+	font-size: 23px;
+	margin-top: 2%;
+}
