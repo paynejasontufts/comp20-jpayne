@@ -13,8 +13,59 @@
 <video src="https://www.cs.tufts.edu/comp/20/wedo.mp4" id="wedo" controls></video>
 <div id="lyrics"></div>
 
-<script>
-	// Complete this section and create a CSS file named style.css
+<script type="text/javascript">
+	function changeLyrics(new_lyrics) {
+		var lyrics = document.getElementById("lyrics");
+		lyrics.innerHTML = new_lyrics;
+	}
+
+	function updateLyrics() {
+		if (vid.currentTime < 4) {
+			changeLyrics("We Do from the Simpsons");
+		}
+		else if (vid.currentTime > 4 && currentTime < 6) {
+			changeLyrics("Who controls the British Crown?");
+		}
+		else if (vid.currentTime > 6 && currentTime < 8) {
+			changeLyrics("Who keeps the metric system down?");
+		}
+		else if (vid.currentTime > 8 && currentTime < 12) {
+			changeLyrics("We do, we do!");
+		}
+		else if (vid.currentTime > 12 && currentTime < 14) {
+			changeLyrics("Who keeps Atlantis off the maps?");
+		}
+		else if (vid.currentTime > 14 && currentTime < 16) {
+			changeLyrics("Who keeps the Martians under wraps?");
+		}
+		else if (vid.currentTime > 16 && currentTime < 21) {
+			changeLyrics("We do, we do!");
+		}
+		else if (vid.currentTime > 21 && currentTime < 24.5) {
+			changeLyrics("Who holds back the electric car?");
+		}
+		else if (vid.currentTime > 24.5 && currentTime < 29) {
+			changeLyrics("Who makes Steve Guttenberg a star?");
+		}
+		else if (vid.currentTime > 29 && currentTime < 33) {
+			changeLyrics("We do, we do!");
+		}
+		else if (vid.currentTime > 33 && currentTime < 36) {
+			changeLyrics("Who robs cavefish of their sight?");
+		}
+		else if (vid.currentTime > 36 && currentTime < 38) {
+			changeLyrics("Who rigs every Oscar night?");
+		}
+		else if (vid.currentTime > 38) {
+			changeLyrics("We do! We do!");
+		}
+		else {
+			changeLyrics("");
+		}
+	}
+
+	var vid = document.getElementById("wedo");
+	vid.addEventListener("timeupdate", updateLyrics(), false);
 </script>
 </body>
 </html>
