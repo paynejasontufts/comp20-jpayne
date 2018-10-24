@@ -1,0 +1,19 @@
+/* MBTA Style Sheet
+ * Jason Payne
+ * 10/23/18 */ 
+
+html {
+	height: 100%;
+	font: Helvetica;
+}
+
+body {
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+
+#map {
+	width: 100%;
+	height: 100%;
+}
