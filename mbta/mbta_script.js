@@ -82,6 +82,12 @@ function requestData(station) {
 }
 
 function getData(theData, station) {
+	for (i = 0; i < 3; i++) {
+		console.log(theData);
+		var arrival = theData.data.attributes.arrival_time;
+		console.log(arrival);
+	}
+
 	return station;
 }
 
@@ -149,11 +155,21 @@ function closestDistance(loc, stations) {
 	});
 
 	var minimum = 25000;
-	var min_loc;
-	stations.forEach(function(loc, station) {
-		var dist = haversineDistance(loc, station.position);
+	var min_loc = stations[0];
+	stations.forEach(function(station) {
+		var dist = haversineDistance(loc.lat, loc.lng, 
+			(station.position).lat, (station.position).lng);
 		console.log(dist);
+		if (dist < minimum) {
+			minimum = dist;
+			min_loc = station;
+		}
 	});
+	var min_line = new google.maps.Polyline({
+		path: [min_loc.position, loc],
+		strokeColor: "#00FF00"
+	});
+	min_line.setMap(map);
 
 	var my_infowindow = new google.maps.InfoWindow({
 		content: "food"
@@ -163,15 +179,11 @@ function closestDistance(loc, stations) {
 	});
 }
 
-function haversineDistance(coords1, coords2) {
+function haversineDistance(lat1, lon1, lat2, lon2) {
 	Number.prototype.toRad = function() {
    		return this * Math.PI / 180;
 	}
 
-	var lat2 = 0; 
-	var lon2 = -71.3161; 
-	var lat1 = 0; 
-	var lon1 = -71.290611; 
 
 	var R = 6371; // km 
 	//has a problem with the .toRad() method below.
@@ -180,9 +192,13 @@ function haversineDistance(coords1, coords2) {
 	var x2 = lon2-lon1;
 	var dLon = x2.toRad();  
 	var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
-                Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
+                Math.cos(radian(lat1)) * Math.cos(radian(lat2)) * 
                 Math.sin(dLon/2) * Math.sin(dLon/2);  
 	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
 	var d = R * c;
 	return d;
+}
+
+function radian(num) {
+	return num * Math.PI / 180;
 }
