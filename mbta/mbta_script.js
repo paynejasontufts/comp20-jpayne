@@ -101,12 +101,6 @@ function getMyLocation() {
 function makeMap() {
 	loc = new google.maps.LatLng(curr_lat, curr_long);
 	map.panTo(loc);
-	var my_marker = new google.maps.Marker({
-		position: loc,
-		map: map,
-		title: "My Location"
-	});
-
 	makeMarkers(stations);
 	makePolylines(stations);
 	closestDistance(loc, stations);
@@ -148,14 +142,47 @@ function makePolylines(stations) {
 }
 
 function closestDistance(loc, stations) {
+	var my_marker = new google.maps.Marker({
+		position: loc,
+		map: map,
+		title: "My Location"
+	});
+
 	var minimum = 25000;
 	var min_loc;
 	stations.forEach(function(loc, station) {
-		var dist = google.maps.geometry.spherical.computeDistanceBetween(loc, station.position);
+		var dist = haversineDistance(loc, station.position);
 		console.log(dist);
 	});
-	
+
 	var my_infowindow = new google.maps.InfoWindow({
 		content: "food"
 	});
+	my_marker.addListener("click", function() {
+		my_infowindow.open(map, my_marker);
+	});
+}
+
+function haversineDistance(coords1, coords2) {
+	Number.prototype.toRad = function() {
+   		return this * Math.PI / 180;
+	}
+
+	var lat2 = 0; 
+	var lon2 = -71.3161; 
+	var lat1 = 0; 
+	var lon1 = -71.290611; 
+
+	var R = 6371; // km 
+	//has a problem with the .toRad() method below.
+	var x1 = lat2-lat1;
+	var dLat = x1.toRad();  
+	var x2 = lon2-lon1;
+	var dLon = x2.toRad();  
+	var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
+                Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
+                Math.sin(dLon/2) * Math.sin(dLon/2);  
+	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+	var d = R * c;
+	return d;
 }
