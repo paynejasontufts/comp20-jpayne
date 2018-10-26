@@ -70,8 +70,10 @@ function initialize() {
 
 function requestData(station) {
 	request = new XMLHttpRequest();
-	request.open("GET", "https://chicken-of-the-sea.herokuapp.com" +
-		"/redline/schedule.json?stop_id=" + station.stop_id, true);
+	request.open("GET", "https://api-v3.mbta.com/predictions?" 
+		+ "filter[route]=Red&filter[stop]=" + station.stop_id + 
+		"&page[limit]=10&page[offset]=0&sort=departure_time&" + 
+		"api_key=1a013d8967314b49a2a238ef5c762427", true);
 	request.onreadystatechange = function() {
 		if (request.readyState == 4) {
 			theData = JSON.parse(request.responseText);
@@ -84,7 +86,7 @@ function requestData(station) {
 function getData(theData, station) {
 	for (i = 0; i < 3; i++) {
 		console.log(theData);
-		var arrival = theData.data.attributes.arrival_time;
+		var arrival = theData[attributes].arrival_time;
 		console.log(arrival);
 	}
 
@@ -114,8 +116,9 @@ function makeMap() {
 
 function makeMarkers(stations) {
 	stations.forEach(function(station) {
+		var info_text = infoText(station);
 		var infowindow = new google.maps.InfoWindow({
-			content: station.s_name + station.arrivals
+			content: info_text
 		});
 		var marker = new google.maps.Marker({
 			position: station.position,
@@ -127,6 +130,12 @@ function makeMarkers(stations) {
 			infowindow.open(map, marker);
 		})
 	});
+}
+
+function infoText(station) {
+	var text = "<h1>Station: " + station.s_name + "</h1>";
+	text += "<h2>Time of Arrival ~~~~~~~~~~ Direction</h2>";
+	return text;
 }
 
 function makePolylines(stations) {
@@ -159,7 +168,6 @@ function closestDistance(loc, stations) {
 	stations.forEach(function(station) {
 		var dist = haversineDistance(loc.lat, loc.lng, 
 			(station.position).lat, (station.position).lng);
-		console.log(dist);
 		if (dist < minimum) {
 			minimum = dist;
 			min_loc = station;
@@ -183,7 +191,6 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
 	Number.prototype.toRad = function() {
    		return this * Math.PI / 180;
 	}
-
 
 	var R = 6371; // km 
 	//has a problem with the .toRad() method below.
