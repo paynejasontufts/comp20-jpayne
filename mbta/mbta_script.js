@@ -207,13 +207,9 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
 	var x2 = lon2-lon1;
 	var dLon = x2.toRad();  
 	var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
-                Math.cos(radian(lat1)) * Math.cos(radian(lat2)) * 
+                Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
                 Math.sin(dLon/2) * Math.sin(dLon/2);  
 	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
 	var d = R * c;
 	return d;
-}
-
-function radian(num) {
-	return num * Math.PI / 180;
 }
