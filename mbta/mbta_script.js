@@ -119,7 +119,7 @@ function makeMarkers(stations) {
 		});
 		var marker = new google.maps.Marker({
 			position: station.position,
-			// icon: t_symbol.jpg,
+			icon: "t_symbol.jpg",
 			map: map,
 			title: station.s_name 
 		});
@@ -155,7 +155,7 @@ function closestDistance(loc, stations) {
 	});
 
 	var minimum = 25000;
-	var min_loc = stations[0];
+	var min_loc = stations[1];
 	stations.forEach(function(station) {
 		var dist = haversineDistance(loc.lat, loc.lng, 
 			(station.position).lat, (station.position).lng);
@@ -167,12 +167,12 @@ function closestDistance(loc, stations) {
 	});
 	var min_line = new google.maps.Polyline({
 		path: [min_loc.position, loc],
-		strokeColor: "#00FF00"
+		strokeColor: "#0000FF"
 	});
 	min_line.setMap(map);
 
 	var my_infowindow = new google.maps.InfoWindow({
-		content: "food"
+		content: "Current Location"
 	});
 	my_marker.addListener("click", function() {
 		my_infowindow.open(map, my_marker);
