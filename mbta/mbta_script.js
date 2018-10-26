@@ -171,9 +171,9 @@ function closestDistance(loc, stations) {
 	var minimum = 25000;
 	var min_loc = stations[1];
 	stations.forEach(function(station) {
-		var dist = haversineDistance(loc.lat, loc.lng, 
-			(station.position).lat, (station.position).lng);
-		dist = dist / 1609.334;
+		var dist = haversineDistance(loc.lat(), loc.lng(), 
+			(station.position).lat(), (station.position).lng());
+		dist = dist / 1.609334;
 		if (dist < minimum) {
 			minimum = dist;
 			min_loc = station;
