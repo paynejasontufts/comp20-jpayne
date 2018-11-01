@@ -11,13 +11,88 @@
         $(document).ready(function() {
             $("#msg").keypress(function() {
                 if (event.which == 13) {
-                    $("#log").prepend("<p>" + $("#msg").val() + "</p>");
-                    $("#log").append(localStorage.content);
+                    var date = new Date;
+                    $("#log").prepend("<p>"+ print_date(date) + " - " + 
+                        $("#msg").val() + "</p>");
                     $("#msg").val("");
                     localStorage.content = $("#log").html();
                 }
             });
+            $("#log").append(localStorage.content);
         });
+
+        function print_date(date) {
+            // sat hul 23 2:16:57 2005
+            var day = get_day(date);
+            var month = get_month(date);
+            return day + " " + month + " " + date.getDate() + " " +
+                date.getHours() + ":" + date.getMinutes()
+                + ":" + date.getSeconds() + " " + 
+                date.getFullYear();
+        }
+
+        function get_day(date) {
+            var day;
+            if (date.getDay() == 0) {
+                day = "Sun";
+            }
+            else if (date.getDay() == 1) {
+                day = "Mon";
+            }
+            else if (date.getDay() == 2) {
+                day = "Tues";
+            }
+            else if (date.getDay() == 3) {
+                day = "Wed";
+            }
+            else if (date.getDay() == 4) {
+                day = "Thurs";
+            }
+            else if (date.getDay() == 5) {
+                day = "Fri";
+            }
+            else {
+                day = "Sat"
+            }
+            return day;
+        }
+
+        function get_month(date) {
+            if (date.getMonth() == 0) {
+                return "Jan";
+            }
+            else if (date.getMonth() == 1) {
+                return "Feb";
+            }
+            else if (date.getMonth() == 2) {
+                return "Mar";
+            }
+            else if (date.getMonth() == 3) {
+                return "Apr";
+            }
+            else if (date.getMonth() == 4) {
+                return "May";
+            }
+            else if (date.getMonth() == 5) {
+                return "Jun";
+            }
+            else if (date.getMonth() == 6) {
+                return "Jul";
+            }
+            else if (date.getMonth() == 7) {
+                return "Aug";
+            }
+            else if (date.getMonth() == 8) {
+                return "Sep";
+            }
+            else if (date.getMonth() == 9) {
+                return "Oct";
+            }
+            else if (date.getMonth() == 10) {
+                return "Nov";
+            }
+            return "Dec";
+        }
     </script>
 </head>
 
