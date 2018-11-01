@@ -9,8 +9,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
-            $("#msg").submit(function(text) {
-                $("#log").prepend("<p>"text"</p>");
+            $("#msg").keypress(function() {
+                if (event.which == 13) {
+                    $("#log").prepend("<p>" + $("#msg").val() + "</p>");
+                    $("#msg").val("");
+                }
             });
         });
     </script>
