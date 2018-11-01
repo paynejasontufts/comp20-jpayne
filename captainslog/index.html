@@ -12,7 +12,9 @@
             $("#msg").keypress(function() {
                 if (event.which == 13) {
                     $("#log").prepend("<p>" + $("#msg").val() + "</p>");
+                    $("#log").append(localStorage.content);
                     $("#msg").val("");
+                    localStorage.content = $("#log").html();
                 }
             });
         });
