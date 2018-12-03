@@ -1,0 +1,36 @@
+html {
+	font-family: Helvetica;
+	size: 12px;
+}
+
+h1 {
+	text-align: center;
+	size: 32px;
+	margin-bottom: 15px;
+}
+
+h2 {
+	size: 25px;
+}
+
+h3 {
+	size: 18px;
+	margin-top: 15px;
+	margin-bottom: 13px;
+}
+
+.image {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 13px;
+	margin-bottom: 13px;
+}
+
+#name {
+	text-align: center;
+}
+
+.Point {
+	font-weight: bold;
+}
