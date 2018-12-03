@@ -12,15 +12,48 @@
 	<h3>By Jason Payne</h3>
 
 	<h2>Introduction</h2>
-	<p>a description of the product and what you were hired to do</p>
+	<p>This document is a web security review for the 2048 Game Server app 
+	created by Ming Chow. The app, hosted on heroku at 
+	"https://gameserver2048.herokuapp.com/", displays scores for the popular
+	game app 2048. It can also call up JSON data given a specific username.
+	In this report, I will be exploiting and reviewing the security and privacy
+	issues that exist in the app.</p>
 
 	<h2>Methodology</h2>
 	<p>An Overview of all security and privacy issues identified in lay language</p>
 
 	<h2>Issues Found</h2>
-	<h3>Isuue 1: </h3>
+	<h3>Issue 1: XSS in Username Input</h3>
 	<ul>
-		<li>Issue:</li>
+		<li>Issue: The client can input a JavaScript string into the "username"
+		field. As a result, the client can create instances of Cross-Site 
+		Scripting, allowing them to do just about anything on the app. To show
+		this weakness, I merely created an alert box to show the problem, but
+		there are far more dangerous applications, if the problem is unchecked.
+		</li>
+		<li>Location: This issue exists in the username aspect of the data,
+		meaning that it effects the GET "/" page. The origin of this problem
+		can originate from either curl or the 2048 game page.</li>
+		<li>Severity: High Severity. This issue allows the client to control
+		almost anything about the webpage, as JavaScript can control any HTML
+		or the data.</li>
+		<li>Description: This XSS vulnerability, as stated above, allows the 
+		client to insert JavaScript into the page, letting them do almost 
+		whatever they want. Suspected the error when I saw that there were no
+		tests to the input that I could funnel into the database. When I tested
+		the alert, as shown below, I knew that XSS was a major flaw in the 
+		security of the application.</li>
+		<li>Proof of Vulnerability</li>
+		<img src="breach_alert.png" alt="An alert box with the message 'This is a breach">
+		<img src="curl_sent.png" alt="A terminal with a successful curl response with JavaScript code in the username">
+		<li>Resolution: To solve this problem, you can simply strip all 
+		special characters from the username after it is inserted. A single 
+		line of JavaScript can fix this: ""</li>
+	</ul>
+
+	<h3>Issue 2: Access to All Data</h3>
+	<ul>
+		<li>Issue: </li>
 		<li>Location:</li>
 		<li>Severity:</li>
 		<li>Description:</li>
@@ -28,17 +61,7 @@
 		<li>Resolution:</li>
 	</ul>
 
-	<h3>Isuue 2: </h3>
-	<ul>
-		<li>Issue:</li>
-		<li>Location:</li>
-		<li>Severity:</li>
-		<li>Description:</li>
-		<li>Proof of Vulnerability</li>
-		<li>Resolution:</li>
-	</ul>
-
-	<h3>Isuue 3: </h3>
+	<h3>Issue 3: </h3>
 	<ul>
 		<li>Issue:</li>
 		<li>Location:</li>
