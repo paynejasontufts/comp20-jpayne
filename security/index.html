@@ -21,14 +21,31 @@
 	issues that exist in the app.</p>
 
 	<h2>Methodology</h2>
-	<p>An Overview of all security and privacy issues identified in lay language</p>
+	<p>To go about testing, my main methods were using query strings and using
+	curl to send data to the server. In terms of query strings, I simply 
+	changed different variables and values in the query string based on the 
+	results I wanted with operators. For curl, I sent in data that may have
+	been invalid through the 2048 game, such as high scores, empty grids, and
+	unrestrained usernames. Additionally, I also used a shell script to create
+	an infinite loop of requests to the server, though the loop did not run 
+	for long.</p>
+
+	<h2>Abstract of Findings</h2>
+	<p>Overall, I identified three major security and privacy errors in the
+	application: first, the client can input new JavaScript into the app, 
+	allowing them to manipulate the page in a near infinite number of ways.
+	Second, the client can manipulate input data such that they can access
+	the raw data of every single username without even needing to know them.
+	Finally, there is no restriction to the number of input requests that can
+	be sent from a single user at once, meaning that the client can overload
+	the database and stop any further input.</p>
 
 	<h2>Issues Found</h2>
-	<h3>Issue 1: XSS in Username Input</h3>
+	<h3>Issue 1: Cross-Site Scripting in Username Input</h3>
 	<ul>
 		<li><span class="Point">Issue:</span> The client can input a JavaScript 
 		string into the "username" field. As a result, the client can create 
-		instances of Cross-Site Scripting, allowing them to do just about 
+		instances of Cross-Site Scripting (XSS), allowing them to do just about 
 		anything on the app. To show this weakness, I merely created an alert 
 		box to show the problem, but there are far more dangerous applications, 
 		if the problem is unchecked. </li>
@@ -50,36 +67,93 @@
 		<img src="breach_alert.png" alt="An alert box with the message 'This is a breach" class="image">
 		<li><span class="Point">Resolution:</span> To solve this problem, you 
 		can simply strip all special characters from the username after it is 
-		inserted. A single line of JavaScript can fix this: ""</li>
+		inserted. A single line of JavaScript in the /submit can fix this: 
+		'username:'username.replace(/[^\w\s]/gi, '')</li>
 	</ul>
 
 	<h3>Issue 2: Access to All Data</h3>
 	<ul>
-		<li><span class="Point">Issue:</span> </li>
-		<li><span class="Point">Location:</span></li>
-		<li><span class="Point">Severity:</span></li>
-		<li><span class="Point">Description:</span></li>
+		<li><span class="Point">Issue:</span> By adding a modifier to the query
+		string in scores.json, the client can access all data in the database, 
+		regardless of their own username. This is accomplished through adding 
+		"[$ne]" in the query string, leading to the database returning all data
+		that is not equal to the given username. This is a major breach of 
+		privacy.</li>
+		<li><span class="Point">Location:</span> This problem is located in 
+		the GET "/scores.json" path. Specifically, it occurs in the query 
+		string portion of the function, when the query string is passed
+		to the database without being checked at all.</li>
+		<li><span class="Point">Severity:</span> Medium severity. While this is 
+		not necessarily dangerous in this application, due to most of the data 
+		already being public on the main page, this issue still causes a major
+		privacy breach, as anyone can access any data. </li>
+		<li><span class="Point">Description:</span> As stated above, this 
+		issue occurs when someone adds a MongoDB search modifier to the query
+		string, specifically the [$ne] operator. I found this issue when I 
+		realized that there was parsing of the query string before it was sent
+		to search the database. My test is shown below, where I found a username
+		with no data corresponding to it, and revealed all stored data by using
+		the mentioned operator.</li>
 		<li><span class="Point">Proof of Vulnerability:</span></li>
 		<img src="all_data_shown.png" alt="A large amount of JSON data, with a [$ne] in the query string" class="image">
-		<li><span class="Point">Resolution:</span></li>
+		<li><span class="Point">Resolution:</span> This problem can be solved
+		through a number of different ways, though one rather simple one is
+		authenification. By creating a password or other form of 
+		authenification for each username, the client can still access their 
+		data while still maintaining their privacy.</li>
 	</ul>
 
-	<h3>Issue 3: </h3>
+	<h3>Issue 3: Infinite Requests</h3>
 	<ul>
-		<li><span class="Point">Issue:</span> </li>
-		<li><span class="Point">Location:</span></li>
-		<li><span class="Point">Severity:</span></li>
-		<li><span class="Point">Description:</span></li>
+		<li><span class="Point">Issue:</span> There is no limit to the number
+		of input requests a single person can send to the server in a given 
+		amount of time, allowing someone to send an unlimited number of 
+		requests. While the server will most likely be able to handle this,
+		MongoDB eventually has a limit to the amount of data it can hold in
+		a single database. This means that until the database is cleared, it
+		will not accept any new data, and it is likely that valuable data could
+		be stored in the deleted data, causing problems for normal clients.</li>
+		<li><span class="Point">Location:</span> This issue exists in the
+		post path, though its results can be seen in either of the get paths. 
+		Eventually, it will cause the database to no longer accept new data
+		from the post /submit path.</li>
+		<li><span class="Point">Severity:</span> Low severity. While this issue
+		is irritating and inconvient most of the time, it can be easily fixed
+		after the fact and, if handled properly, will likely not result in any
+		breaches of privacy or integrity.</li>
+		<li><span class="Point">Description:</span> As previously mentioned,
+		this error occurs when someone runs an (or several) infinite loop(s)
+		sending data to the server. I found this issue when automating my 
+		testing, resulting in my realization that there was nothing stopping
+		me from overloading the database. As pictured below, I wrote an infinite
+		loop in shell script, and ran it for a short time to test that it 
+		worked. In the interest of time and redundency, I did not run the loop
+		long enough to fill the database.</li>
 		<li><span class="Point">Proof of Vulnerability:</span></li>
-		<li><span class="Point">Resolution:</span></li>
+		<img src="shell_loop.png" alt="Four lines of shell script creating an infinite loop of curl requests" class="image">
+		<img src="repeated_data.png" alt="Many lines of the same data that was sent to the server in the previous image" class="image">
+		<li><span class="Point">Resolution:</span> To resolve this issue, you
+		can limit the number of requests sent in by a single person. The 
+		simplest way to do this is likely to limit the number of entries from
+		a single username, or to create authentification that is necessary to
+		send requests, resulting in a limited number of requests per person.
+		</li>
 	</ul>
 
 	<h2>Conclusion</h2>
-	<p>Future considerations and recommendations</p>
+	<p>As mentioned in each section, all of the exposed problems have 
+	relatively simple fixes in this application that are outlined above. 
+	In the future, it would be wise to never trust anything the client can 
+	send, whether it be curled, unlimited strings, query strings, or the sheer
+	number of requests a client can send. By restricting client manuverability,
+	the integrity and privacy of the website or app can be greatly improved.</p>
 
 	<h3>References</h3>
 	<ul>
-		<li>Here is a reference</li>
+		<li>Here is where I got the code for string special character removal:
+		https://stackoverflow.com/questions/4374822/remove-all-special-characters-with-regexp</li>
+		<li>I used this page to create the infinite loop that was pictured:
+		https://www.cyberciti.biz/faq/bash-infinite-loop/</li>
 	</ul>
 </body>
 
